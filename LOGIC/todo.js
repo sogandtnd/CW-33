@@ -8,9 +8,16 @@ export const Store = createContext({
 const Reducer = (todoState, action) => {
   switch (action.type) {
     case "create-todo":
-      return todoState.map(({ title }) => {
-        return (title = action.payload);
-      });
+      return [
+        ...todoState,
+        {
+          title: action.payload.title,
+          id: action.payload.id,
+          completed: action.payload.completed,
+        },
+      ];
+    case "create-todoList":
+      return action.payload.users;
 
     default:
       break;
@@ -20,7 +27,7 @@ const Reducer = (todoState, action) => {
 const StoreProvider = ({ children }) => {
   const initialValue = { title: "", id: "", completed: false };
 
-  const [todoState, dispatch] = useReducer(Reducer, [initialValue]);
+  const [todoState, dispatch] = useReducer(Reducer, []);
 
   return (
     <Store.Provider value={{ todoState, dispatch }}>{children}</Store.Provider>

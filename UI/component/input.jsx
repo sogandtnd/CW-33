@@ -1,10 +1,9 @@
 import axios from "axios";
 import { useContext, useState } from "react";
 import { BsPlusSquare } from "react-icons/bs";
+import { toast } from "react-toastify";
 import { BASE_URL } from "../../LOGIC/baseUrl.js";
 import { Store } from "../../LOGIC/todo";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 function Input(params) {
   const { todoState, dispatch } = useContext(Store);
@@ -14,7 +13,6 @@ function Input(params) {
 
   const handleChange = (e) => {
     setInputValue(e.target.value);
-    dispatch({ type: "create-todo", payload: e.target.value });
   };
   const notify = () => toast("Successfully added");
 
@@ -27,14 +25,13 @@ function Input(params) {
     axios.post(`${BASE_URL}/todos`, data).then((res) => {
       if (res.status === 201) {
         notify();
+        dispatch({ type: "create-todo", payload: data });
       }
     });
   };
 
   return (
     <>
-      {" "}
-      <ToastContainer />
       <div className="flex relative ">
         <input
           onChange={handleChange}
